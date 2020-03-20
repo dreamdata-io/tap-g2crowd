@@ -1,0 +1,4 @@
+catalog.json
+config.json
+Pipfile*
+.vscode/*
