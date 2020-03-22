@@ -1,0 +1,77 @@
+{
+  "type": ["null", "object"],
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "links": {
+      "type": ["null", "object"],
+      "properties": {
+        "self": {
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "attributes": {
+      "type": ["null", "object"],
+      "properties": {
+        "first_name": {
+          "type": ["null", "string"]
+        },
+        "last_name": {
+          "type": ["null", "string"]
+        },
+        "company_size": {
+          "type": ["null", "string"]
+        },
+        "image_url": {
+          "type": ["null", "string"]
+        },
+        "industry": {
+          "type": ["null", "string"]
+        },
+        "headline": {
+          "type": ["null", "string"]
+        },
+        "public_detail_url": {
+          "type": ["null", "string"]
+        },
+        "company": {
+          "type": ["null", "string"]
+        },
+        "created_at": {
+          "format": "date-time",
+          "type": ["null", "string"]
+        },
+        "updated_at": {
+          "format": "date-time",
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "relationships": {
+      "type": ["null", "object"],
+      "properties": {
+        "product": {
+          "type": ["null", "object"],
+          "properties": {
+            "links": {
+              "type": ["null", "object"],
+              "properties": {
+                "self": {
+                  "type": ["null", "string"]
+                },
+                "related": {
+                  "type": ["null", "string"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

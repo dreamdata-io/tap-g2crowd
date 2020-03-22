@@ -1,0 +1,177 @@
+{
+  "type": ["null", "object"],
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "links": {
+      "type": ["null", "object"],
+      "properties": {
+        "self": {
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "attributes": {
+      "type": ["null", "object"],
+      "properties": {
+        "name": {
+          "type": ["null", "string"]
+        },
+        "legal_name": {
+          "type": ["null", "string"]
+        },
+        "domain": {
+          "type": ["null", "string"]
+        },
+        "domain_aliases": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "string"]
+          }
+        },
+        "external_id": {
+          "type": ["null", "string"]
+        },
+        "twitter": {
+          "type": ["null", "string"]
+        },
+        "twitter_id": {
+          "type": ["null", "string"]
+        },
+        "twitter_bio": {
+          "type": ["null", "string"]
+        },
+        "twitter_followers": {
+          "type": ["null", "integer"]
+        },
+        "twitter_following": {
+          "type": ["null", "integer"]
+        },
+        "twitter_location": {
+          "type": ["null", "string"]
+        },
+        "twitter_site": {
+          "type": ["null", "string"]
+        },
+        "twitter_avatar": {
+          "type": ["null", "string"]
+        },
+        "linkedin": {
+          "type": ["null", "string"]
+        },
+        "facebook": {
+          "type": ["null", "string"]
+        },
+        "url": {
+          "type": ["null", "string"]
+        },
+        "site_title": {
+          "type": ["null", "string"]
+        },
+        "site_h1": {
+          "type": ["null", "string"]
+        },
+        "site_meta": {
+          "type": ["null", "string"]
+        },
+        "site_author": {
+          "type": ["null", "string"]
+        },
+        "tags": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "string"]
+          }
+        },
+        "tech": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "string"]
+          }
+        },
+        "description": {
+          "type": ["null", "string"]
+        },
+        "founded_year": {
+          "type": ["null", "integer"]
+        },
+        "location": {
+          "type": ["null", "string"]
+        },
+        "time_zone": {
+          "type": ["null", "string"]
+        },
+        "utc_offset": {
+          "type": ["null", "integer"]
+        },
+        "crunchbase": {
+          "type": ["null", "string"]
+        },
+        "email_provider": {
+          "type": ["null", "boolean"]
+        },
+        "company_type": {
+          "type": ["null", "string"]
+        },
+        "alexa_us_rank": {
+          "type": ["null", "integer"]
+        },
+        "alexa_global_rank": {
+          "type": ["null", "integer"]
+        },
+        "market_cap": {
+          "type": ["null", "string"]
+        },
+        "raised": {
+          "type": ["null", "string"]
+        },
+        "employees": {
+          "type": ["null", "integer"]
+        },
+        "employees_range": {
+          "type": ["null", "string"]
+        },
+        "annual_revenue": {
+          "type": ["null", "string"]
+        },
+        "street_number": {
+          "type": ["null", "string"]
+        },
+        "street_name": {
+          "type": ["null", "string"]
+        },
+        "sub_premise": {
+          "type": ["null", "string"]
+        },
+        "city": {
+          "type": ["null", "string"]
+        },
+        "state": {
+          "type": ["null", "string"]
+        },
+        "state_code": {
+          "type": ["null", "string"]
+        },
+        "postal_code": {
+          "type": ["null", "string"]
+        },
+        "country": {
+          "type": ["null", "string"]
+        },
+        "country_code": {
+          "type": ["null", "string"]
+        },
+        "latitude": {
+          "type": ["null", "string"]
+        },
+        "longitude": {
+          "type": ["null", "string"]
+        }
+      }
+    }
+  }
+}

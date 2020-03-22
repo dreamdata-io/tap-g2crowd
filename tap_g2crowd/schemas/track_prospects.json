@@ -1,0 +1,72 @@
+{
+  "type": ["null", "object"],
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "links": {
+      "type": ["null", "object"],
+      "properties": {
+        "self": {
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "attributes": {
+      "type": ["null", "object"],
+      "properties": {
+        "first_seen": {
+          "type": ["null", "object"],
+          "properties": {
+            "occurred_at": {
+              "format": "date-time",
+              "type": ["null", "string"]
+            },
+            "scope": {
+              "type": ["null", "string"]
+            },
+            "path": {
+              "type": ["null", "string"]
+            }
+          }
+        },
+        "last_seen": {
+          "type": ["null", "object"],
+          "properties": {
+            "occurred_at": {
+              "format": "date-time",
+              "type": ["null", "string"]
+            },
+            "scope": {
+              "type": ["null", "string"]
+            },
+            "path": {
+              "type": ["null", "string"]
+            }
+          }
+        },
+        "saw_first": {
+          "type": ["null", "string"]
+        },
+        "isp": {
+          "type": ["null", "boolean"]
+        },
+        "industry": {
+          "type": ["null", "string"]
+        },
+        "organization": {
+          "type": ["null", "string"]
+        },
+        "external_id": {
+          "type": ["null", "string"]
+        },
+        "visitor_id": {
+          "type": ["null", "string"]
+        }
+      }
+    }
+  }
+}
