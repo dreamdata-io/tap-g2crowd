@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import os
+import sys
 import json
 import singer
-from singer import utils, metadata
+from singer import utils, metadata, Catalog, CatalogEntry, Schema
 
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
 LOGGER = singer.get_logger()
