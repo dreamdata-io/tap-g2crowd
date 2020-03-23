@@ -1,0 +1,116 @@
+{
+  "type": ["null", "object"],
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "links": {
+      "type": ["null", "object"],
+      "properties": {
+        "self": {
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "attributes": {
+      "type": ["null", "object"],
+      "properties": {
+        "visitor_id": {
+          "type": ["null", "string"]
+        },
+        "url": {
+          "type": ["null", "string"]
+        },
+        "tag": {
+          "type": ["null", "string"]
+        },
+        "time": {
+          "format": "date-time",
+          "type": ["null", "string"]
+        },
+        "title": {
+          "type": ["null", "string"]
+        },
+        "product_ids": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "string"]
+          }
+        },
+        "category_ids": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "string"]
+          }
+        },
+        "user_location": {
+          "type": ["null", "object"],
+          "properties": {
+            "country": {
+              "type": ["null", "string"]
+            },
+            "country_code": {
+              "type": ["null", "string"]
+            },
+            "state": {
+              "type": ["null", "string"]
+            },
+            "state_code": {
+              "type": ["null", "string"]
+            },
+            "city": {
+              "type": ["null", "string"]
+            }
+          }
+        },
+        "organization": {
+          "type": ["null", "string"]
+        },
+        "created_at": {
+          "format": "date-time",
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "relationships": {
+      "type": ["null", "object"],
+      "properties": {
+        "company": {
+          "type": ["null", "object"],
+          "properties": {
+            "links": {
+              "type": ["null", "object"],
+              "properties": {
+                "self": {
+                  "type": ["null", "string"]
+                },
+                "related": {
+                  "type": ["null", "string"]
+                }
+              }
+            }
+          }
+        },
+        "industry": {
+          "type": ["null", "object"],
+          "properties": {
+            "links": {
+              "type": ["null", "object"],
+              "properties": {
+                "self": {
+                  "type": ["null", "string"]
+                },
+                "related": {
+                  "type": ["null", "string"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
