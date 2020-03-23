@@ -61,10 +61,6 @@ def discover() -> Catalog:
     return Catalog(streams)
 
 
-def do_discover():
-    catalog = discover()
-    catalog_dict = catalog.to_dict()
-    json.dump(catalog_dict, sys.stdout, indent=2, sort_keys=True)
 
 
 def get_selected_streams(catalog):
@@ -83,7 +79,8 @@ def main():
 
     # If discover flag was passed, run discovery mode and dump output to stdout
     if args.discover:
-        do_discover()
+        catalog = discover()
+        catalog.dump()
     # Otherwise run in sync mode
     else:
         if args.catalog:
