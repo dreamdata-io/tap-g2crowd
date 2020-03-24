@@ -4,6 +4,7 @@ import sys
 import json
 import singer
 from singer import utils, metadata, Catalog, CatalogEntry, Schema
+from tap_g2crowd.g2crowd import G2Crowd
 
 KEY_PROPERTIES = "id"
 STREAMS = {
@@ -61,14 +62,15 @@ def discover() -> Catalog:
     return Catalog(streams)
 
 
-
-
-def get_selected_streams(catalog):
-    pass
-
-
-def sync(config, state, catalog):
-    pass
+def sync(catalog, config, state=None):
+    for catalog_entry in catalog.streams:
+        if not catalog_entry.is_selected():
+            continue
+        # Loop over streams in catalog
+        LOGGER.info(f"syncing {catalog_entry.tap_stream_id}")
+        g2crowd = G2Crowd(catalog_entry, config)
+        g2crowd.stream(state)
+    return
 
 
 @utils.handle_top_exception(LOGGER)
@@ -87,8 +89,7 @@ def main():
             catalog = args.catalog
         else:
             catalog = discover()
-
-        sync(args.config, args.state, catalog)
+        sync(catalog, args.config, args.state)
 
 
 if __name__ == "__main__":
