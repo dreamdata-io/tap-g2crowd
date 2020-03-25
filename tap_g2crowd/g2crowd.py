@@ -61,7 +61,7 @@ class G2Crowd:
                 raise
 
     def __get_start_end(self, state: dict):
-        end_date = pytz.utc.localize(datetime.utcnow() - timedelta(days=1))
+        end_date = pytz.utc.localize(datetime.utcnow())
         LOGGER.info(f"sync data until: {end_date}")
 
         config_start_date = self.config.get("start_date")
