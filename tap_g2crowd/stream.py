@@ -12,16 +12,18 @@ LOGGER = singer.get_logger()
 BASE_URL = "https://data.g2.com"
 PAGE_NUMBER = "page%5Bnumber%5D="
 PAGE_SIZE = "page%5Bsize%5D="
-ENDPOINTS_PATH = {
+ENDPOINTS = {
     "companies": "/api/v1/ahoy/companies",
     "remote_events_streams": "/api/v1/ahoy/remote-event-streams",
     "track_prospects": "/api/v1/attribution_tracking/remote-conversions",
     "users": "/api/v1/users",
     "vendors": "/api/v1/vendors",
-    "remote_events_streams_path": ["attributes", "time"],
-    "track_prospects_path": ["attributes", "last_seen", "occurred_at"],
-    "users_path": ["attributes", "updated_at"],
-    "vendors_path": ["attributes", "updated_at"],
+}
+REPLICATION_PATH = {
+    "remote_events_streams": ["attributes", "time"],
+    "track_prospects": ["attributes", "last_seen", "occurred_at"],
+    "users": ["attributes", "updated_at"],
+    "vendor": ["attributes", "updated_at"],
 }
 
 
@@ -57,7 +59,7 @@ def get_replication_value(obj: dict, path=None, default=None):
 
 
 def get_records(api_key, endpoint, tap_stream_id):
-    path = ENDPOINTS_PATH[f"{tap_stream_id}_path"]
+    path = REPLICATION_PATH[tap_stream_id]
     page_number = 1
     while True:
         url = get_url(endpoint, page_number, 25)
@@ -73,7 +75,7 @@ def get_records(api_key, endpoint, tap_stream_id):
 
 
 def streams(api_key, tap_stream_id):
-    endpoint = ENDPOINTS_PATH[tap_stream_id]
+    endpoint = ENDPOINTS[tap_stream_id]
     if tap_stream_id == "companies":
         yield from get_companies(api_key, endpoint)
     else:
