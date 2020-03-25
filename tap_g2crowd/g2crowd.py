@@ -18,7 +18,7 @@ class G2Crowd:
         self.mdata = metadata.to_map(catalog.metadata)
         self.bookmark_key = (
             None
-            if self.tap_stream_id == "companies"
+            if self.tap_stream_id in ["companies"]
             else self.mdata.get(()).get("valid-replication-keys")[0]
         )
         self.config = config
