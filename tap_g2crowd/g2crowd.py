@@ -45,7 +45,7 @@ class G2Crowd:
                         continue
 
                     else:
-                        # record = transformer.transform(d, self.schema, self.mdata)
+                        record = transformer.transform(d, self.schema, self.mdata)
                         singer.write_record(self.tap_stream_id, d)
                         new_bookmark = replication_value
                         if not prev_bookmark:
