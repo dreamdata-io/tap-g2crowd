@@ -48,11 +48,11 @@ def get_companies(api_key, endpoint):
             return zip(companies, replication_value)
 
 
-def get_replication_value(obj: dict, path=None, default=None):
-    if not path:
+def get_replication_value(obj: dict, path_to_replication_key=None, default=None):
+    if not path_to_replication_key:
         return default
-    for p in path:
-        obj = obj.get(p, None)
+    for path_element in path_to_replication_key:
+        obj = obj.get(path_element, None)
         if not obj:
             return default
     return parser.isoparse(obj)
@@ -66,7 +66,10 @@ def get_records(api_key, endpoint, tap_stream_id):
         records = call_api(api_key, url)
         if records:
             replication_value = map(
-                lambda p: get_replication_value(p, path=path), records
+                lambda record: get_replication_value(
+                    obj=record, path_to_replication_key=path
+                ),
+                records,
             )
             yield from zip(records, replication_value)
             page_number += 1
