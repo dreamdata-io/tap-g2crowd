@@ -9,7 +9,12 @@ setup(
     url="https://github.com/dreamdata-io/tap-g2crowd",
     classifiers=["Programming Language :: Python :: 3 :: Only"],
     py_modules=["tap_g2crowd"],
-    install_requires=["singer-python==5.9.0", "requests==2.23.0",],
+    install_requires=[
+        "singer-python==5.9.0",
+        "requests==2.23.0",
+        "ratelimit==2.2.1",
+        "backoff==1.10.0",
+    ],
     entry_points="""
     [console_scripts]
     tap-g2crowd=tap_g2crowd:main
