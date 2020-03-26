@@ -11,8 +11,6 @@ STREAMS = {
     "companies": {},
     "remote_events_streams": {"valid_replication_keys": ["time"]},
     "track_prospects": {"valid_replication_keys": ["occurred_at"]},
-    "users": {"valid_replication_keys": ["updated_at"]},
-    "vendors": {"valid_replication_keys": ["updated_at"]},
 }
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
 LOGGER = singer.get_logger()
@@ -46,9 +44,6 @@ def discover() -> Catalog:
             schema=schema,
             key_properties=KEY_PROPERTIES,
             valid_replication_keys=valid_replication_keys,
-            replication_method="FULL_TABLE"
-            if not valid_replication_keys
-            else "INCREMENTAL",
         )
         streams.append(
             CatalogEntry(
@@ -63,14 +58,17 @@ def discover() -> Catalog:
 
 
 def sync(catalog, config, state=None):
-    for catalog_entry in catalog.streams:
+    for tap_stream_id in [
+        "remote_events_streams",
+        "track_prospects",
+        "companies",
+    ]:
+        catalog_entry = catalog.get_stream(tap_stream_id)
         if not catalog_entry.is_selected():
             continue
-        # Loop over streams in catalog
-        LOGGER.info(f"syncing {catalog_entry.tap_stream_id}")
+        LOGGER.info(f"syncing {tap_stream_id}")
         g2crowd = G2Crowd(catalog_entry, config)
-        g2crowd.stream(state)
-    return
+        g2crowd.do_sync(state)
 
 
 @utils.handle_top_exception(LOGGER)
