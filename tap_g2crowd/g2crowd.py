@@ -18,7 +18,7 @@ class G2Crowd:
         self.mdata = metadata.to_map(catalog.metadata)
         self.bookmark_key = (
             None
-            if self.tap_stream_id == "companies"
+            if self.tap_stream_id in ["companies"]
             else self.mdata.get(()).get("valid-replication-keys")[0]
         )
         self.config = config
@@ -61,27 +61,28 @@ class G2Crowd:
                 raise
 
     def __get_start_end(self, state: dict):
-        default_date = datetime.utcnow() + timedelta(weeks=4)
-        end_date = pytz.utc.localize(datetime.utcnow() - timedelta(1))
+        end_date = pytz.utc.localize(datetime.utcnow())
         LOGGER.info(f"sync data until: {end_date}")
 
         config_start_date = self.config.get("start_date")
         if config_start_date:
-            default_date = parser.isoparse(config_start_date)
+            config_start_date = parser.isoparse(config_start_date)
+        else:
+            config_start_date = datetime.utcnow() + timedelta(weeks=4)
 
         if not state:
-            LOGGER.info(f"using 'start_date' from config: {default_date}")
-            return default_date, end_date
+            LOGGER.info(f"using 'start_date' from config: {config_start_date}")
+            return config_start_date, end_date
 
         account_record = state["bookmarks"].get(self.tap_stream_id, None)
         if not account_record:
-            LOGGER.info(f"using 'start_date' from config: {default_date}")
-            return default_date, end_date
+            LOGGER.info(f"using 'start_date' from config: {config_start_date}")
+            return config_start_date, end_date
 
         current_bookmark = account_record.get(self.bookmark_key, None)
         if not current_bookmark:
-            LOGGER.info(f"using 'start_date' from config: {default_date}")
-            return default_date, end_date
+            LOGGER.info(f"using 'start_date' from config: {config_start_date}")
+            return config_start_date, end_date
 
         state_date = parser.isoparse(current_bookmark)
 
