@@ -3,10 +3,12 @@ from singer import metadata, CatalogEntry, Transformer
 from typing import Union
 from datetime import timedelta, datetime
 from dateutil import parser
-from tap_g2crowd.stream import streams
+from tap_g2crowd.stream import Stream
 import pytz
 
 LOGGER = singer.get_logger()
+
+companies_endpoints = []
 
 
 class G2Crowd:
@@ -22,17 +24,25 @@ class G2Crowd:
             else self.mdata.get(()).get("valid-replication-keys")[0]
         )
         self.config = config
+        self.stream = Stream(
+            self.config.get("api_key"), self.tap_stream_id, companies_endpoints
+        )
 
-    def stream(self, state):
+    def get_companies_endpoints(self, record):
+        companies_endpoints_path = ["relationships", "company", "links", "related"]
+        companies_endpoints.append(
+            self.stream.get_replication_value(record, companies_endpoints_path)
+        )
+
+    def do_sync(self, state):
         singer.write_schema(
             self.tap_stream_id, self.schema, self.key_properties,
         )
-        api_key = self.config.get("api_key")
         prev_bookmark = None
         start_date, end_date = self.__get_start_end(state)
         with Transformer() as transformer:
             try:
-                data = streams(api_key, self.tap_stream_id)
+                data = self.stream.streams()
 
                 for d, replication_value in data:
                     if not replication_value:
@@ -45,6 +55,8 @@ class G2Crowd:
                         continue
 
                     else:
+                        if self.tap_stream_id == "remote_events_streams":
+                            self.get_companies_endpoints(d)
                         record = transformer.transform(d, self.schema, self.mdata)
                         singer.write_record(self.tap_stream_id, d)
                         new_bookmark = replication_value
