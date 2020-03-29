@@ -96,13 +96,9 @@ class G2Crowd:
             LOGGER.info(f"using 'start_date' from config: {config_start_date}")
             return config_start_date, end_date
 
-        state_date = parser.isoparse(current_bookmark)
-
-        # increment by one to not reprocess the previous date
-        new_date = state_date + timedelta(days=1)
-
-        LOGGER.info(f"using 'start_date' from previous state: {current_bookmark}")
-        return new_date, end_date
+        start_date = parser.isoparse(current_bookmark)
+        LOGGER.info(f"using 'start_date' from previous state: {start_date}")
+        return start_date, end_date
 
     def __advance_bookmark(self, state: dict, bookmark: Union[str, datetime, None]):
         if not bookmark:
