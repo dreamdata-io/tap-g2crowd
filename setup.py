@@ -10,7 +10,7 @@ setup(
     classifiers=["Programming Language :: Python :: 3 :: Only"],
     py_modules=["tap_g2crowd"],
     install_requires=[
-        "singer-python==5.9.0",
+        "singer-python==5.8.1",
         "requests==2.22.0",
         "ratelimit==2.2.1",
         "backoff==1.8.0",
