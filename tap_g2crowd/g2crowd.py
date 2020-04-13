@@ -58,7 +58,7 @@ class G2Crowd:
                         if self.tap_stream_id == "remote_events_streams":
                             self.get_companies_endpoints(d)
                         record = transformer.transform(d, self.schema, self.mdata)
-                        singer.write_record(self.tap_stream_id, d)
+                        singer.write_record(self.tap_stream_id, record)
                         new_bookmark = replication_value
                         if not prev_bookmark:
                             prev_bookmark = new_bookmark
