@@ -41,10 +41,10 @@ class Stream:
 
     def get_companies(self):
         if not self.companies_endpoints:
-            LOGGER.error(
-                f"companies endpoints are empty. companies endpoints can only be acquired after syncing remote_events_streams"
+            LOGGER.warn(
+                f"no remote_events_streams data to get companies data"
             )
-            sys.exit(1)
+            sys.exit(0)
         for company_url in self.companies_endpoints:
             company = self.call_api(company_url)
             yield company, None
