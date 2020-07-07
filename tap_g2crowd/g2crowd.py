@@ -8,26 +8,14 @@ import pytz
 
 LOGGER = singer.get_logger()
 
-companies_endpoints = []
 
 
 class G2Crowd:
     def __init__(self, config: Dict):
         self.config = config
-        self.stream = Stream(
-            self.config.get("api_key"), self.tap_stream_id, companies_endpoints
-        )
+        self.companies_endpoints = []
 
-    def get_companies_endpoints(self, record):
-        companies_endpoints_path = ["relationships", "company", "links", "related"]
-        companies_endpoints.append(
-            self.stream.get_replication_value(record, companies_endpoints_path)
-        )
-
-    def do_sync(self, state):
-        singer.write_schema(
-            self.tap_stream_id, self.schema, self.key_properties,
-        )
+        stream = Stream(self.config["api_key"], self.companies_endpoints)
         prev_bookmark = None
         start_date, end_date = self.__get_start_end(state)
         with Transformer() as transformer:
@@ -56,7 +44,7 @@ class G2Crowd:
                         if prev_bookmark < new_bookmark:
                             state = self.__advance_bookmark(state, prev_bookmark)
                             prev_bookmark = new_bookmark
-                return self.__advance_bookmark(state, prev_bookmark)
+                self.companies_endpoints = stream.companies_endpoints
 
             except Exception:
                 self.__advance_bookmark(state, prev_bookmark)
