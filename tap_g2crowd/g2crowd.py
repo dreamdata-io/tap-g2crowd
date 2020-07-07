@@ -12,17 +12,7 @@ companies_endpoints = []
 
 
 class G2Crowd:
-    def __init__(self, catalog: CatalogEntry, config):
-        self.catalog = catalog
-        self.tap_stream_id = catalog.tap_stream_id
-        self.schema = catalog.schema.to_dict()
-        self.key_properties = catalog.key_properties
-        self.mdata = metadata.to_map(catalog.metadata)
-        self.bookmark_key = (
-            None
-            if self.tap_stream_id in ["companies"]
-            else self.mdata.get(()).get("valid-replication-keys")[0]
-        )
+    def __init__(self, config: Dict):
         self.config = config
         self.stream = Stream(
             self.config.get("api_key"), self.tap_stream_id, companies_endpoints
