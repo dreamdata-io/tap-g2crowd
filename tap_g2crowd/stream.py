@@ -12,39 +12,46 @@ LOGGER = singer.get_logger()
 
 
 class Stream:
-    SESSION = requests.Session()
-    LOGGER = singer.get_logger()
     BASE_URL = "https://data.g2.com"
-    PAGE_NUMBER = "page%5Bnumber%5D="
-    PAGE_SIZE = "page%5Bsize%5D="
-    ENDPOINTS = {
-        "companies": "/api/v1/ahoy/companies",
-        "remote_events_streams": "/api/v1/ahoy/remote-event-streams",
-        "track_prospects": "/api/v1/attribution_tracking/remote-conversions",
-        "users": "/api/v1/users",
-        "vendors": "/api/v1/vendors",
-    }
-    REPLICATION_PATH = {
-        "remote_events_streams": ["attributes", "time"],
-        "track_prospects": ["attributes", "last_seen", "occurred_at"],
-        "users": ["attributes", "updated_at"],
-        "vendor": ["attributes", "updated_at"],
-    }
 
-    def __init__(self, api_key, tap_stream_id, companies_endpoints):
+    def __init__(self, api_key: str, companies_endpoints: List):
+        self.SESSION = requests.Session()
         self.api_key = api_key
-        self.tap_stream_id = tap_stream_id
         self.companies_endpoints = companies_endpoints
 
-    def get_url(self, endpoint, page_number=1, page_size=1):
-        return f"{self.BASE_URL}{endpoint}?{self.PAGE_NUMBER}{page_number}&{self.PAGE_SIZE}{page_size}"
+    def streams(self, tap_stream_id: str):
+        if tap_stream_id == "track_prospects":
+            yield from self.get_track_prospects()
+        elif tap_stream_id == "remote_events_streams":
+            yield from self.get_remote_events()
+        elif tap_stream_id == "companies":
+            yield from self.get_companies()
+        else:
+            raise NotImplementedError(f"unknown stream_id: {tap_stream_id}")
+
+    def get_track_prospects(self):
+        endpoint = "/api/v1/attribution_tracking/remote-conversions"
+        replication_path = ["attributes", "last_seen", "occurred_at"]
+        params = {"page[number]": 1, "page[size]": 100}
+        yield from self.get_records(
+            endpoint=endpoint, params=params, replication_path=replication_path
+        )
+
+    def get_remote_events(self):
+        endpoint = "/api/v1/ahoy/remote-event-streams"
+        replication_path = ["attributes", "time"]
+        params = {"page[number]": 1, "page[size]": 25}
+        yield from self.get_records(
+            endpoint=endpoint,
+            params=params,
+            replication_path=replication_path,
+        )
 
     def get_companies(self):
+        # companies data is retrieved according to remote-event-streams
         if not self.companies_endpoints:
-            LOGGER.warn(
-                f"no remote_events_streams data to get companies data"
-            )
-            sys.exit(0)
+            LOGGER.warn(f"no remote_events_streams data to get companies data")
+            return None, None
         for company_url in self.companies_endpoints:
             company = self.call_api(company_url)
             yield company, None
