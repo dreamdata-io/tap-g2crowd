@@ -1,6 +1,5 @@
 import singer
-from singer import metadata, CatalogEntry, Transformer
-from typing import Union
+from typing import Union, Dict, Optional
 from datetime import timedelta, datetime
 from dateutil import parser
 from tap_g2crowd.stream import Stream
