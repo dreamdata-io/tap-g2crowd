@@ -27,8 +27,9 @@ class G2Crowd:
                         record = transformer.transform(d, self.schema, self.mdata)
                         singer.write_record(self.tap_stream_id, record)
 
-                    elif (start_date >= replication_value) or (
-                        end_date <= replication_value
+                    if replication_value and (
+                        (start_date >= replication_value)
+                        or (end_date < replication_value)
                     ):
                         continue
 
