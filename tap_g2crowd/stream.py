@@ -99,6 +99,7 @@ class Stream:
             requests.exceptions.HTTPError,
             ratelimit.exception.RateLimitException,
         ),
+        max_tries=5,
     )
     @limits(calls=100, period=1)
     def call_api(self, url):
