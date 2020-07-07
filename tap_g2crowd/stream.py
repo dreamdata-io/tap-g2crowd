@@ -56,12 +56,10 @@ class Stream:
             company = self.call_api(company_url)
             yield company, None
 
-    def get_replication_value(
-        self, obj: dict, path_to_replication_key=None, default=None
-    ):
-        if not path_to_replication_key:
+    def get_value(self, obj: dict, path: Optional[List] = None, default=None):
+        if not path:
             return default
-        for path_element in path_to_replication_key:
+        for path_element in path:
             obj = obj.get(path_element, None)
             if not obj:
                 return default
