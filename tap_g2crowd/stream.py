@@ -65,32 +65,25 @@ class Stream:
                 return default
         return obj
 
-    def get_records(self, endpoint):
-        path = self.REPLICATION_PATH[self.tap_stream_id]
-        page_number = 1
+    def get_records(
+        self,
+        endpoint: str,
+        params: Dict,
+        replication_path: List,
+    ):
+        for record in self.pagination(endpoint, params):
+            yield record, parser.isoparse(
+                self.get_value(obj=record, path=replication_path)
+            )
+
+    def pagination(self, endpoint: str, params: Dict):
         while True:
-            url = self.get_url(endpoint, page_number, 25)
-            records = self.call_api(url)
+            records = self.call_api(f"{self.BASE_URL}{endpoint}", params)
             if records:
-                replication_value = map(
-                    lambda record: parser.isoparse(
-                        self.get_replication_value(
-                            obj=record, path_to_replication_key=path
-                        )
-                    ),
-                    records,
-                )
-                yield from zip(records, replication_value)
-                page_number += 1
+                yield from records
+                params["page[number]"] += 1
             else:
                 break
-
-    def streams(self):
-        endpoint = self.ENDPOINTS[self.tap_stream_id]
-        if self.tap_stream_id == "companies":
-            yield from self.get_companies()
-        else:
-            yield from self.get_records(endpoint)
 
     @backoff.on_exception(
         backoff.expo,
@@ -102,14 +95,14 @@ class Stream:
         max_tries=5,
     )
     @limits(calls=100, period=1)
-    def call_api(self, url):
-
+    def call_api(self, url: str, params: Optional[Dict] = None):
         response = self.SESSION.get(
             url,
             headers={
                 "Accept": "application/vnd.api+json",
                 "Authorization": f"Token token={self.api_key}",
             },
+            params=params,
         )
         response.raise_for_status()
         response = response.json()
