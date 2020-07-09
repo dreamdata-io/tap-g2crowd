@@ -51,7 +51,7 @@ class Stream:
         # companies data is retrieved according to remote-event-streams
         if not self.companies_endpoints:
             LOGGER.warn(f"no remote_events_streams data to get companies data")
-            return None, None
+            yield None, None
         for company_url in self.companies_endpoints:
             company = self.call_api(company_url)
             yield company, None
