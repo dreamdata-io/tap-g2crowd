@@ -49,29 +49,24 @@ class G2Crowd:
                     if not prev_bookmark:
                         prev_bookmark = new_bookmark
 
-                    if prev_bookmark < new_bookmark:
-                        state = self.__advance_bookmark(
-                            state=state,
-                            bookmark=prev_bookmark,
-                            bookmark_key=bookmark_key,
-                            tap_stream_id=tap_stream_id,
-                        )
-                        prev_bookmark = new_bookmark
-                return self.__advance_bookmark(
-                    state=state,
-                    bookmark=prev_bookmark,
-                    bookmark_key=bookmark_key,
-                    tap_stream_id=tap_stream_id,
-                )
+                    if prev_bookmark >= new_bookmark:
+                        continue
 
-            except Exception:
+                    self.__advance_bookmark(
+                        state=state,
+                        bookmark=prev_bookmark,
+                        bookmark_key=bookmark_key,
+                        tap_stream_id=tap_stream_id,
+                    )
+                    prev_bookmark = new_bookmark
+
+            finally:
                 self.__advance_bookmark(
                     state=state,
                     bookmark=prev_bookmark,
                     bookmark_key=bookmark_key,
                     tap_stream_id=tap_stream_id,
                 )
-                raise
 
     def __get_start_end(self, state: dict, bookmark_key: str, tap_stream_id: str):
         end_date = pytz.utc.localize(datetime.utcnow())
