@@ -42,9 +42,7 @@ class Stream:
         replication_path = ["attributes", "time"]
         params = {"page[number]": 1, "page[size]": 25}
         yield from self.get_records(
-            endpoint=endpoint,
-            params=params,
-            replication_path=replication_path,
+            endpoint=endpoint, params=params, replication_path=replication_path,
         )
 
     def get_companies(self):
@@ -66,10 +64,7 @@ class Stream:
         return obj
 
     def get_records(
-        self,
-        endpoint: str,
-        params: Dict,
-        replication_path: List,
+        self, endpoint: str, params: Dict, replication_path: List,
     ):
         for record in self.pagination(endpoint, params):
             yield record, parser.isoparse(
