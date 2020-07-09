@@ -34,7 +34,7 @@ class G2Crowd:
                         or (end_date < replication_value)
                     ):
                         continue
-                    if tap_stream_id == "remote_events_streams":
+                    if tap_stream_id == "remote_events_streams":# companies endpoints is retrieved according to remote-event-streams
                         self.companies_endpoints.append(
                             stream.get_value(
                                 record, ["relationships", "company", "links", "related"]
