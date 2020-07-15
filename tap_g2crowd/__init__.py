@@ -1,74 +1,28 @@
 #!/usr/bin/env python3
-import os
-import sys
-import json
 import singer
-from singer import utils, metadata, Catalog, CatalogEntry, Schema
+from singer import utils
+from typing import Optional, Dict
 from tap_g2crowd.g2crowd import G2Crowd
 
-KEY_PROPERTIES = "id"
+
 STREAMS = {
+    "track_prospects": {"bookmark_key": "occurred_at"},
+    "remote_events_streams": {"bookmark_key": "time"},
     "companies": {},
-    "remote_events_streams": {"valid_replication_keys": ["time"]},
-    "track_prospects": {"valid_replication_keys": ["occurred_at"]},
 }
 REQUIRED_CONFIG_KEYS = ["start_date", "api_key"]
 LOGGER = singer.get_logger()
 
 
-def get_abs_path(path):
-    return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
+def sync(config: Dict, state: Optional[Dict] = None):
+    g2crowd = G2Crowd(config)
 
+    for tap_stream_id, stream_config in STREAMS.items():
 
-# Load schemas from schemas folder
-def load_schemas():
-    schemas = {}
-
-    for filename in os.listdir(get_abs_path("schemas")):
-        path = get_abs_path("schemas") + "/" + filename
-        file_raw = filename.replace(".json", "")
-        with open(path) as file:
-            schemas[file_raw] = json.load(file)
-
-    return schemas
-
-
-def discover() -> Catalog:
-    schemas = load_schemas()
-    streams = []
-
-    for tap_stream_id, props in STREAMS.items():
-        valid_replication_keys = props.get("valid_replication_keys", [])
-        schema = schemas[tap_stream_id]
-        mdata = metadata.get_standard_metadata(
-            schema=schema,
-            key_properties=KEY_PROPERTIES,
-            valid_replication_keys=valid_replication_keys,
-        )
-        streams.append(
-            CatalogEntry(
-                stream=tap_stream_id,
-                tap_stream_id=tap_stream_id,
-                key_properties=KEY_PROPERTIES,
-                schema=Schema.from_dict(schema),
-                metadata=mdata,
-            )
-        )
-    return Catalog(streams)
-
-
-def sync(catalog, config, state=None):
-    for tap_stream_id in [
-        "remote_events_streams",
-        "track_prospects",
-        "companies",
-    ]:
-        catalog_entry = catalog.get_stream(tap_stream_id)
-        if not catalog_entry.is_selected():
-            continue
         LOGGER.info(f"syncing {tap_stream_id}")
-        g2crowd = G2Crowd(catalog_entry, config)
-        g2crowd.do_sync(state)
+        g2crowd.do_sync(
+            state=state, tap_stream_id=tap_stream_id, stream_config=stream_config
+        )
 
 
 @utils.handle_top_exception(LOGGER)
@@ -77,17 +31,7 @@ def main():
     # Parse command line arguments
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
 
-    # If discover flag was passed, run discovery mode and dump output to stdout
-    if args.discover:
-        catalog = discover()
-        catalog.dump()
-    # Otherwise run in sync mode
-    else:
-        if args.catalog:
-            catalog = args.catalog
-        else:
-            catalog = discover()
-        sync(catalog, args.config, args.state)
+    sync(args.config, args.state)
 
 
 if __name__ == "__main__":
